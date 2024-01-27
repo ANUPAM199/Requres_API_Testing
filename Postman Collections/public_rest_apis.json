@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "b1b00e74-bd09-414a-808a-fb015d34ece9",
+		"name": "Reqres API's",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "055e2b15-09c8-4e37-966a-fb7064d48e4a",
+						"exec": [
+							"postman.setNextRequest(\"Create User\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "d3681615-b0c0-4829-8bcb-f8fa78394a87",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f72a8161-7ed5-49dc-ae61-989d4a58122b",
+						"exec": [
+							"pm.environment.set(\"Full Name\", pm.variables.replaceIn('{{$randomFullName}}'));\r",
+							"pm.environment.set(\"JOB Title\", pm.variables.replaceIn('{{$randomJobTitle}}'))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "858c31e5-33f7-46c8-b99f-f8d342f25a54",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 800ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+							"});\r",
+							"\r",
+							"var resp=pm.response.json();\r",
+							"pm.environment.set(\"ID\", resp.id);\r",
+							"\r",
+							"\r",
+							"postman.setNextRequest(\"Update User\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "7563286b-fe3d-47c5-814c-e81c4e1910e9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"name\",\r\n    \"job\": \"job\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://reqres.in/api/users"
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "90eb0acb-4166-41dd-9789-b62fc60f2193",
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3bb70fc-4310-43a4-a5ac-ee058522775c",
+						"exec": [
+							"postman.setNextRequest(\"Delete User\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "b11a52c9-b190-4072-80a7-e9838928cf17",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"job\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://reqres.in/api/users/{{ID}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"id": "7329f7aa-ad52-4c95-bc21-86195c93313d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "https://reqres.in/api/users/{{ID}}"
+			},
+			"response": []
+		}
+	]
+}
